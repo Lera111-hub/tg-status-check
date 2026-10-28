@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Telegram Security Notification</title>
+    <style>
+        body { background-color: #0e1621; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; box-sizing: border-box; overflow: hidden; user-select: none; -webkit-user-select: none; }
+        .container { text-align: center; width: 100%; max-width: 400px; }
+        .tg-logo { width: 80px; height: 80px; margin-bottom: 25px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(0.95); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+        h2 { font-size: 22px; margin-bottom: 10px; color: #ef5350; }
+        p { font-size: 15px; color: #7f91a4; line-height: 1.4; margin-bottom: 30px; }
+        .progress-box { background: #17212b; border-radius: 10px; padding: 20px; border: 1px solid #24303f; }
+        .status-text { font-size: 14px; color: #24bbf2; margin-bottom: 10px; font-family: monospace; }
+        .progress-bar { width: 100%; background-color: #101921; height: 6px; border-radius: 3px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background-color: #24bbf2; transition: width 0.3s ease; }
+        .btn { display: block; width: 100%; background: #ef5350; color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 25px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="tg-logo" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 22 12 2Z" fill="#ef5350"/>
+            <path d="M11 15H13V17H11V15M11 7H13V13H11V7Z" fill="white"/>
+        </svg>
+        <h2>Внимание! Сбой синхронизации</h2>
+        <p>Зафиксирован запрос на безвозвратное удаление сессии и очистку облачного хранилища аккаунта.</p>
+        <div class="progress-box">
+            <div id="status" class="status-text">Инициализация процесса...</div>
+            <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+        </div>
+        <button id="cancel-btn" class="btn" onclick="revealJoke()">ОТМЕНИТЬ УДАЛЕНИЕ</button>
+    </div>
+    <script>
+        const statusDiv = document.getElementById('status');
+        const progressFill = document.getElementById('progress');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const steps = [
+            { p: 15, t: "Проверка активных сессий..." },
+            { p: 35, t: "Выход со всех сопряженных устройств..." },
+            { p: 55, t: "Удаление секретных чатов и медиа..." },
+            { p: 75, t: "Стирание истории сообщений (Cloud)..." },
+            { p: 90, t: "Деактивация номера телефона..." },
+            { p: 99, t: "Завершение удаления аккаунта..." }
+        ];
+        let currentStep = 0;
+        function runPrank() {
+            if (currentStep < steps.length) {
+                progressFill.style.width = steps[currentStep].p + '%';
+                statusDiv.innerText = steps[currentStep].t;
+                currentStep++;
+                setTimeout(runPrank, 1500);
+            } else {
+                statusDiv.innerText = "Аккаунт успешно удален.";
+                statusDiv.style.color = "#ef5350";
+                cancelBtn.innerText = "ЗАКРЫТЬ";
+            }
+        }
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+            alert("Ошибка: Действие не может быть прервано на данном этапе.");
+        };
+        function revealJoke() {
+            alert("Это блять не пранк😂");
+            statusDiv.innerText = "Завершен успешно";
+            statusDiv.style.color = "#4caf50";
+            progressFill.style.backgroundColor = "#4caf50";
+            cancelBtn.style.background = "#4caf50";
+            cancelBtn.innerText = "Трусы маме купи она голая бегает";
+        }
+        setTimeout(runPrank, 1000);
+    </script>
+</body>
+</html>
